@@ -19,6 +19,7 @@ function App() {
      <Header />
      <MainContent />
      <Footer />
+     <UserProfile/>
     
       <div>
         <a href="https://vite.dev" target="_blank">
@@ -37,13 +38,13 @@ function App() {
           Edit <code>src/App.jsx</code> and save to test HMR
         </p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    <div>
+      <div>
       <h1>User Profile</h1>
       <UserProfile name="Alice" age={25} bio="Loves hiking and photography." />
     </div>
+      <p className="read-the-docs">
+        Click on the Vite and React logos to learn more
+      </p>
     
     </>
   )
