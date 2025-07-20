@@ -1,11 +1,11 @@
+import React from 'react';
+
 function Footer() {
-    return (
-        <div>
-   <footer>
-  <p>© 2023 City Lovers</p>
-</footer>
-        </div>
-    );
+  return (
+    <footer style={{ backgroundColor: '#222', color: 'white', textAlign: 'center', padding: '10px', marginTop: '20px' }}>
+      <p>&copy; 2025 My Favorite Cities. All rights reserved.</p>
+    </footer>
+  );
 }
 
 export default Footer;
