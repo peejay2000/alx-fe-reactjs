@@ -2,30 +2,55 @@ import { create } from 'zustand';
 
 export const useRecipeStore = create((set) => ({
   recipes: [],
-  favorites: [],
-  recommendations: [],
+  searchTerm: '',
+  filteredRecipes: [],
 
-  // Add a recipe to favorites
-  addFavorite: (recipeId) =>
+  // Actions
+  addRecipe: (newRecipe) =>
     set((state) => ({
-      favorites: [...new Set([...state.favorites, recipeId])], // avoid duplicates
+      recipes: [...state.recipes, newRecipe],
+      filteredRecipes: [...state.recipes, newRecipe].filter((recipe) =>
+        recipe.title.toLowerCase().includes(state.searchTerm.toLowerCase())
+      ),
     })),
 
-  // Remove a recipe from favorites
-  removeFavorite: (recipeId) =>
-    set((state) => ({
-      favorites: state.favorites.filter((id) => id !== recipeId),
-    })),
-
-  // Optional: generate mock recommendations
-  generateRecommendations: () =>
+  setSearchTerm: (term) =>
     set((state) => {
-      const recommended = state.recipes.filter(
-        (recipe) =>
-          state.favorites.includes(recipe.id) && Math.random() > 0.5
+      const filtered = state.recipes.filter((recipe) =>
+        recipe.title.toLowerCase().includes(term.toLowerCase())
       );
-      return { recommendations: recommended };
+      return { searchTerm: term, filteredRecipes: filtered };
     }),
 
-  // Add/Update other existing recipe actions here as well...
+  setRecipes: (recipes) =>
+    set((state) => ({
+      recipes,
+      filteredRecipes: recipes.filter((recipe) =>
+        recipe.title.toLowerCase().includes(state.searchTerm.toLowerCase())
+      ),
+    })),
+
+  deleteRecipe: (id) =>
+    set((state) => {
+      const newRecipes = state.recipes.filter((r) => r.id !== id);
+      return {
+        recipes: newRecipes,
+        filteredRecipes: newRecipes.filter((r) =>
+          r.title.toLowerCase().includes(state.searchTerm.toLowerCase())
+        ),
+      };
+    }),
+
+  updateRecipe: (updatedRecipe) =>
+    set((state) => {
+      const newRecipes = state.recipes.map((r) =>
+        r.id === updatedRecipe.id ? updatedRecipe : r
+      );
+      return {
+        recipes: newRecipes,
+        filteredRecipes: newRecipes.filter((r) =>
+          r.title.toLowerCase().includes(state.searchTerm.toLowerCase())
+        ),
+      };
+    }),
 }));
