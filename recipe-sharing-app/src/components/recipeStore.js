@@ -2,55 +2,30 @@ import { create } from 'zustand';
 
 export const useRecipeStore = create((set) => ({
   recipes: [],
-  searchTerm: '',
-  filteredRecipes: [],
+  favorites: [],
+  recommendations: [],
 
-  // Actions
-  addRecipe: (newRecipe) =>
+  // Add a recipe to favorites
+  addFavorite: (recipeId) =>
     set((state) => ({
-      recipes: [...state.recipes, newRecipe],
-      filteredRecipes: [...state.recipes, newRecipe].filter((recipe) =>
-        recipe.title.toLowerCase().includes(state.searchTerm.toLowerCase())
-      ),
+      favorites: [...new Set([...state.favorites, recipeId])], // avoid duplicates
     })),
 
-  setSearchTerm: (term) =>
-    set((state) => {
-      const filtered = state.recipes.filter((recipe) =>
-        recipe.title.toLowerCase().includes(term.toLowerCase())
-      );
-      return { searchTerm: term, filteredRecipes: filtered };
-    }),
-
-  setRecipes: (recipes) =>
+  // Remove a recipe from favorites
+  removeFavorite: (recipeId) =>
     set((state) => ({
-      recipes,
-      filteredRecipes: recipes.filter((recipe) =>
-        recipe.title.toLowerCase().includes(state.searchTerm.toLowerCase())
-      ),
+      favorites: state.favorites.filter((id) => id !== recipeId),
     })),
 
-  deleteRecipe: (id) =>
+  // Optional: generate mock recommendations
+  generateRecommendations: () =>
     set((state) => {
-      const newRecipes = state.recipes.filter((r) => r.id !== id);
-      return {
-        recipes: newRecipes,
-        filteredRecipes: newRecipes.filter((r) =>
-          r.title.toLowerCase().includes(state.searchTerm.toLowerCase())
-        ),
-      };
+      const recommended = state.recipes.filter(
+        (recipe) =>
+          state.favorites.includes(recipe.id) && Math.random() > 0.5
+      );
+      return { recommendations: recommended };
     }),
 
-  updateRecipe: (updatedRecipe) =>
-    set((state) => {
-      const newRecipes = state.recipes.map((r) =>
-        r.id === updatedRecipe.id ? updatedRecipe : r
-      );
-      return {
-        recipes: newRecipes,
-        filteredRecipes: newRecipes.filter((r) =>
-          r.title.toLowerCase().includes(state.searchTerm.toLowerCase())
-        ),
-      };
-    }),
+  // Add/Update other existing recipe actions here as well...
 }));
