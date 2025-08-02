@@ -1,4 +1,6 @@
-// Placeholder – you’ll add actual API call later
+import api from './api';
+
 export const fetchUserData = async (username) => {
-  // Use axios or fetch here later
+  const response = await api.get(`/users/${username}`);
+  return response.data;
 };
