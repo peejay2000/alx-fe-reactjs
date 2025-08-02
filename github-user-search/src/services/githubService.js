@@ -1,6 +1,3 @@
-import axios from 'axios';
-
-// Use GitHub Search API for advanced user search
 export const searchUsers = async ({ username, location, minRepos, page = 1 }) => {
   let query = [];
 
@@ -9,17 +6,7 @@ export const searchUsers = async ({ username, location, minRepos, page = 1 }) =>
   if (minRepos) query.push(`repos:>=${minRepos}`);
 
   const q = query.join('+');
-
-  const response = await axios.get(`https://api.github.com/search/users`, {
-    params: {
-      q,
-      per_page: 10,
-      page,
-    },
-    headers: {
-      Authorization: `token ${import.meta.env.VITE_GITHUB_API_TOKEN || ''}`,
-    },
-  });
+  const response = await api.get(`/search/users?q=${q}&per_page=10&page=${page}`);
 
   return response.data;
 };
