@@ -7,6 +7,9 @@ const Search = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  setError("Looks like we cant find the user"); // no apostrophe
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -45,7 +48,8 @@ const Search = () => {
       </form>
 
       {loading && <p className="text-blue-500">Loading...</p>}
-      {error && <p className="text-red-500">"Looks like we can't find the user"</p>}
+      {error && <p className="text-red-500">{error}</p>}
+
       {user && (
         <div className="border p-4 rounded shadow">
           <img
