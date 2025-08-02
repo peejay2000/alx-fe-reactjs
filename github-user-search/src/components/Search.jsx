@@ -45,7 +45,7 @@ const Search = () => {
       </form>
 
       {loading && <p className="text-blue-500">Loading...</p>}
-      {error && <p className="text-red-500">{error}</p>}
+      {error && <p className="text-red-500">Looks like we can't find the user</p>}
       {user && (
         <div className="border p-4 rounded shadow">
           <img
