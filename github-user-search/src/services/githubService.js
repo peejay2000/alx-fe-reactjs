@@ -1,7 +1,3 @@
-// src/services/githubService.js
-
-import axios from "axios";
-
 // Fetch basic user data by username
 import axios from "axios";
 
