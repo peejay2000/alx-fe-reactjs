@@ -1,111 +1,62 @@
 // src/components/Search.jsx
 
 import { useState } from "react";
-import { fetchAdvancedUserSearch } from "../services/githubService";
+import { fetchUserData } from "../services/githubService";
 
 const Search = () => {
-  const [formData, setFormData] = useState({
-    username: "",
-    location: "",
-    minRepoCount: "",
-  });
-
-  const [results, setResults] = useState([]);
+  const [username, setUsername] = useState("");
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [page, setPage] = useState(1);
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const [error, setError] = useState("");
 
   const handleSearch = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(false);
+    setError("");
+    setUser(null);
+
     try {
-      const users = await fetchAdvancedUserSearch({ ...formData, page });
-      setResults(users);
+      const data = await fetchUserData(username);
+      setUser(data);
     } catch (err) {
-      setError(true);
+      setError("Looks like we can't find the user");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-4">
-      <form onSubmit={handleSearch} className="space-y-4 bg-white p-4 rounded shadow">
+    <div className="max-w-xl mx-auto p-4">
+      <form onSubmit={handleSearch} className="flex gap-2 mb-4">
         <input
           type="text"
-          name="username"
-          placeholder="GitHub Username"
-          value={formData.username}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-        />
-        <input
-          type="text"
-          name="location"
-          placeholder="Location"
-          value={formData.location}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-        />
-        <input
-          type="number"
-          name="minRepoCount"
-          placeholder="Minimum Repos"
-          value={formData.minRepoCount}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Enter GitHub username"
+          className="border border-gray-300 rounded px-4 py-2 flex-1"
         />
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         >
           Search
         </button>
       </form>
 
-      {loading && <p className="mt-4 text-center">Loading...</p>}
-      {error && <p className="mt-4 text-center text-red-500">Looks like we can't find the user.</p>}
-
-      <div className="mt-6 space-y-4">
-        {results.map((user) => (
-          <div
-            key={user.id}
-            className="flex items-center space-x-4 p-4 bg-gray-100 rounded shadow"
+      {loading && <p>Loading...</p>}
+      {error && <p className="text-red-500">{error}</p>}
+      {user && (
+        <div className="border rounded p-4 shadow">
+          <img src={user.avatar_url} alt={user.login} className="w-24 h-24 rounded-full mb-2" />
+          <h2 className="text-xl font-semibold">{user.name || user.login}</h2>
+          <a
+            href={user.html_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 underline"
           >
-            <img
-              src={user.avatar_url}
-              alt={user.login}
-              className="w-16 h-16 rounded-full"
-            />
-            <div>
-              <h2 className="text-lg font-semibold">{user.login}</h2>
-              <a
-                href={user.html_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-500 underline"
-              >
-                View Profile
-              </a>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Load More - Pagination */}
-      {results.length > 0 && (
-        <div className="text-center mt-6">
-          <button
-            onClick={() => setPage((prev) => prev + 1)}
-            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-          >
-            Load More
-          </button>
+            View GitHub Profile
+          </a>
         </div>
       )}
     </div>
