@@ -1,7 +1,9 @@
+// src/components/ProtectedRoute.jsx
 import { Navigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";   // ✅ import the hook
 
 function ProtectedRoute({ children }) {
-  const isAuthenticated = false; // change this to true to simulate login
+  const { isAuthenticated } = useAuth();  // ✅ use the hook
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
