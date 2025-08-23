@@ -12,11 +12,7 @@ export default function TodoList() {
   const addTodo = (e) => {
     e.preventDefault();
     if (!input.trim()) return;
-    const newTodo = {
-      id: Date.now(),
-      text: input,
-      completed: false,
-    };
+    const newTodo = { id: Date.now(), text: input, completed: false };
     setTodos([...todos, newTodo]);
     setInput("");
   };
@@ -42,7 +38,6 @@ export default function TodoList() {
           placeholder="Add a new todo"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          aria-label="todo-input"
         />
         <button type="submit">Add</button>
       </form>
@@ -56,7 +51,6 @@ export default function TodoList() {
               textDecoration: todo.completed ? "line-through" : "none",
               cursor: "pointer",
             }}
-            data-testid="todo-item"
           >
             {todo.text}
             <button onClick={(e) => { e.stopPropagation(); deleteTodo(todo.id); }}>
