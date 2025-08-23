@@ -1,9 +1,8 @@
-// src/App.jsx
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Home from "./pages/Home";
-import Profile from "./pages/Profile";
-import Blog from "./pages/Blog";
 import Login from "./pages/Login";
+import Profile from "./components/Profile";
+import BlogPost from "./components/BlogPost";  // ✅ use BlogPost
 
 function App() {
   return (
@@ -19,7 +18,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/profile/*" element={<Profile />} />
-          <Route path="/blog/:id" element={<Blog />} />
+          <Route path="/blog/:id" element={<BlogPost />} />   {/* ✅ */}
           <Route path="/login" element={<Login />} />
         </Routes>
       </div>
