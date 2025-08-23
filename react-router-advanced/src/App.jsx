@@ -1,8 +1,10 @@
+// src/App.jsx
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Profile from "./components/Profile";
-import BlogPost from "./components/BlogPost";  // ✅ use BlogPost
+import BlogPost from "./components/BlogPost";
+import ProtectedRoute from "./components/ProtectedRoute";   // ✅ Import it
 
 function App() {
   return (
@@ -17,8 +19,15 @@ function App() {
 
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/profile/*" element={<Profile />} />
-          <Route path="/blog/:id" element={<BlogPost />} />   {/* ✅ */}
+          <Route
+            path="/profile/*"
+            element={
+              <ProtectedRoute>   {/* ✅ Use ProtectedRoute */}
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/blog/:id" element={<BlogPost />} />
           <Route path="/login" element={<Login />} />
         </Routes>
       </div>
